@@ -1,12 +1,45 @@
 #![deny(clippy::all)]
 
+fn greet(name: &String) {
+    println!("Hello {}", name);
+}
+
+fn greet2(name: String) {
+    println!("Hello {}", name);
+}
+
+fn clear(value: &mut String) {
+    value.clear();
+}
+
+/* Missing lifetime specifier:
+fn get_name() -> &String {
+    &"Doug".to_string()
+}
+*/
+
+fn get_name() -> String {
+    "Doug".to_string()
+}
 fn main() {
-    // Tuples
-    let personal_data = (70, "Doug");
-    let (age, name) = personal_data;
+    let mut name = String::from("Doug");
+    // let name1: String = name;  // name2 takes 'ownership' of name so the first println would fail
+    let name2: &String = &name; // instead, use the address
 
-    println!("{} is {} years old.", name, age);
+    println!("Hello {}", name); // borrow of moved value: name
+    println!("Hello {}", name2);
 
-    let first_name = personal_data.1;
-    println!("{} is your first name.", first_name);
+    let age1 = 10;
+    let age2 = age1;
+
+    println!("The first age: {} (should be 10)", age1);
+    println!("The second age: {} (should be 10)", age2);
+
+    greet(name2);
+
+    clear(&mut name);
+
+    greet2(name);
+    name = get_name();
+    greet2(name);
 }
